@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">WalmartCodingTest</string>
+    <string name="required_internet">NO INTERNET CONNECTION.Please check your internet connection and reopen the app</string>
+    <string name="no_records_found">No Records Found!!</string>
+    <string name="base_url">https://gist.githubusercontent.com/peymano-wmt/32dcb892b06648910ddd40406e37fdab/raw/db25946fd77c5873b0303b858e861ce724e0dcd0/</string>
+</resources>
