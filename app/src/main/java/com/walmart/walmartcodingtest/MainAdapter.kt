@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.walmart.walmartcodingtest.data.CountriesListResponse
 import com.walmart.walmartcodingtest.databinding.ItemCountriesBinding
+import com.walmart.walmartcodingtest.utils.Extensions.checkNull
 import kotlinx.android.synthetic.main.item_countries.view.*
 
 class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
@@ -34,9 +35,9 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
         RecyclerView.ViewHolder(itemNyclistBinding.root) {
         fun bind(item: CountriesListResponse) {
             /*Setting recyclerview data on UI*/
-            itemView.countryTv.text = item.name.plus(" , ").plus(item.region)
-            itemView.countryCodeTv.text = item.code
-            itemView.capitalTv.text = item.capital
+            itemView.countryTv.text = item.name.checkNull().plus(" , ").plus(item.region.checkNull())
+            itemView.countryCodeTv.text = item.code.checkNull()
+            itemView.capitalTv.text = item.capital.checkNull()
         }
 
     }

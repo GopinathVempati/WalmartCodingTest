@@ -5,7 +5,9 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.walmart.walmartcodingtest.databinding.ActivityMainBinding
 import com.walmart.walmartcodingtest.network.ApiClient
+import com.walmart.walmartcodingtest.network.NetworkResponse
 import com.walmart.walmartcodingtest.repo.MainRepository
+import com.walmart.walmartcodingtest.utils.Extensions.showSnackBar
 import com.walmart.walmartcodingtest.viewmodel.MainViewModel
 import com.walmart.walmartcodingtest.viewmodel.MainViewModelFactory
 
@@ -21,26 +23,34 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
 
         viewModel =
-            ViewModelProvider(
-                this,
-                MainViewModelFactory(MainRepository((retrofitService)))
-            )[MainViewModel::class.java]
+            ViewModelProvider(this, MainViewModelFactory(MainRepository((retrofitService))))[MainViewModel::class.java]
 
         binding.countryListTv.adapter = adapter
 
         viewModel.countriesListResponse.observe(this) {
             hideProgressBar()
-            adapter.updateData(it)
+            when (it) {
+                is NetworkResponse.Success -> {
+                    if (it.data.isSuccessful) {
+                        it.data.body()?.apply {
+                            adapter.updateData(this)
+                        }
+                    }
+                }
+                is NetworkResponse.Error -> {
+                    showSnackBar(this@MainActivity,handleException(it.exception))
+                }
+            }
         }
 
         viewModel.errorMessage.observe(this) {
             hideProgressBar()
-            Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
+            showSnackBar(this@MainActivity,it)
         }
 
         apiCall {
             showProgressBar()
-            viewModel.getNYCList()
+            viewModel.getCountriesList()
         }
     }
 }
